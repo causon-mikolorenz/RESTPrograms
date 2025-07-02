@@ -36,5 +36,10 @@ def update_program(id):
     #TODO(Causon): Implement logic to update a program
     pass
 
+@app.route('/programs', methods=['POST'])
+def create_program():
+    #TODO(Efondo): Implement logic to create a program
+    pass
+
 if __name__ == "__main__":
     app.run(debug=True)
