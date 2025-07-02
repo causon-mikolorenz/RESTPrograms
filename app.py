@@ -1,6 +1,24 @@
 from flask import Flask, request
+import sqlite3
+
+PROGRAMS_DB = "programs.db"
 
 app = Flask(__name__)
+
+def create_tables():
+    """Create programs table if they don't exist"""
+    with sqlite3.connect(PROGRAMS_DB) as connection:
+        cursor = connection.cursor()
+        
+        cursor.execute("""CREATE TABLE IF NOT EXISTS program (
+                       id INTEGER PRIMARY KEY AUTOINCREMENT,
+                       name VARCHAR(255) NOT NULL,
+                       year_duration INTEGER NOT NULL,
+                       level VARCHAR(100) NOT NULL,
+                       degree_type VARCHAR(100) NOT NULL)""")
+        
+        connection.commit()
+        print("Program table has been created successfully!")
 
 @app.route('/')
 def home():
@@ -42,4 +60,5 @@ def delete_program(id):
     pass
 
 if __name__ == "__main__":
+    create_tables()
     app.run(debug=True)
