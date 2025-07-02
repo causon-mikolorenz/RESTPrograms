@@ -21,5 +21,10 @@ def get_programs_by_year_length(value):
     #TODO(Franco): Implement logic to get programs by year length
     pass
 
+@app.route('/programs/<string:name>', methods=['GET'])
+def get_program_by_name(name):
+    #TODO(Franco): Implement logic to get a specific program by name
+    pass
+
 if __name__ == "__main__":
     app.run(debug=True)
