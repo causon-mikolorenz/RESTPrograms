@@ -1,6 +1,8 @@
 from flask import Flask, request
 import sqlite3
 
+PROGRAM_DB = "programs.db"
+
 app = Flask(__name__)
 
 @app.route('/')
