@@ -26,5 +26,10 @@ def get_program_by_name(name):
     #TODO(Franco): Implement logic to get a specific program by name
     pass
 
+@app.route('/programs/<string:degree_type>', methods=['GET'])
+def get_programs_by_degree_type(degree_type):
+    #TODO(Franco): Implement logic to get programs by degree type
+    pass
+
 if __name__ == "__main__":
     app.run(debug=True)
