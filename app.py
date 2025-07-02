@@ -21,9 +21,14 @@ def list_programs():
     # TODO(Franco): Implement logic to filter based on the above query params
     pass
 
-@app.route('/programs/<int:id>', methods=['PUT', 'PATCH'])
-def update_program(id):
-    #TODO(Causon): Implement logic to update a program
+@app.route('/programs/<int:id>', methods=['PUT'])
+def replace_program(id):
+    # TODO(Causon): Implement logic to fully replace a program
+    pass
+
+@app.route('/programs/<int:id>', methods=['PATCH'])
+def modify_program(id):
+    # TODO(Causon): Implement logic to partially update a program
     pass
 
 @app.route('/programs', methods=['POST'])
