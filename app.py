@@ -41,5 +41,10 @@ def create_program():
     #TODO(Efondo): Implement logic to create a program
     pass
 
+@app.route('/programs/<int:id>', methods=['DELETE'])
+def delete_program(id):
+    #TODO(Lopez): Implement logic to delete a program
+    pass
+
 if __name__ == "__main__":
     app.run(debug=True)
