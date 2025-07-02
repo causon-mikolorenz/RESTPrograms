@@ -1,13 +1,13 @@
 from flask import Flask, request
 import sqlite3
 
-PROGRAM_DB = "programs.db"
+PROGRAMS_DB = "programs.db"
 
 app = Flask(__name__)
 
 def create_tables():
     """Create programs table if they don't exist"""
-    with sqlite3.connect(PROGRAM_DB) as connection:
+    with sqlite3.connect(PROGRAMS_DB) as connection:
         cursor = connection.cursor()
         
         cursor.execute("""CREATE TABLE IF NOT EXISTS program (
