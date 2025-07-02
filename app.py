@@ -31,5 +31,10 @@ def get_programs_by_degree_type(degree_type):
     #TODO(Franco): Implement logic to get programs by degree type
     pass
 
+@app.route('/programs/<int:id>', methods=['PUT', 'PATCH'])
+def update_program(id):
+    #TODO(Causon): Implement logic to update a program
+    pass
+
 if __name__ == "__main__":
     app.run(debug=True)
