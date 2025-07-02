@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, request
 
 app = Flask(__name__)
 
@@ -6,29 +6,19 @@ app = Flask(__name__)
 def home():
     pass
 
-@app.route('/programs', methods=['GET'])
 def list_programs():
-    #TODO(Franco): Implement logic to list all programs
-    pass
+    """
+    Handles:
+    - GET /programs → list all
+    - GET /programs?year_length=4
+    - GET /programs?name=BSIT
+    - GET /programs?degree_type=Bachelor
+    """
+    year_length = request.args.get('year_length')
+    name = request.args.get('name')
+    degree_type = request.args.get('degree_type')
 
-@app.route('/programs/<int:id>', methods=['GET'])
-def get_program(id):
-    #TODO(Franco): Implement logic to get a specific program by ID
-    pass
-
-@app.route('/programs/?year_length=value', methods=['GET'])
-def get_programs_by_year_length(value):
-    #TODO(Franco): Implement logic to get programs by year length
-    pass
-
-@app.route('/programs/<string:name>', methods=['GET'])
-def get_program_by_name(name):
-    #TODO(Franco): Implement logic to get a specific program by name
-    pass
-
-@app.route('/programs/<string:degree_type>', methods=['GET'])
-def get_programs_by_degree_type(degree_type):
-    #TODO(Franco): Implement logic to get programs by degree type
+    # TODO(Franco): Implement logic to filter based on the above query params
     pass
 
 @app.route('/programs/<int:id>', methods=['PUT', 'PATCH'])
