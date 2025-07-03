@@ -20,23 +20,44 @@ def create_tables():
         connection.commit()
         print("Program table has been created successfully!")
 
-@app.route('/')
-def home():
-    pass
-
-def list_programs():
-    """
-    Handles:
-    - GET /programs → list all
-    - GET /programs?year_length=4
-    - GET /programs?name=BSIT
-    - GET /programs?degree_type=Bachelor
-    """
+def get_programs():
     year_length = request.args.get('year_length')
     name = request.args.get('name')
     degree_type = request.args.get('degree_type')
 
-    # TODO(Franco): Implement logic to filter based on the above query params
+    query = "SELECT * FROM program WHERE 1=1"
+    params = []
+
+    if year_length:
+        try:
+            int(year_length) 
+            query += " AND year_duration = ?"
+            params.append(year_length)
+        except ValueError:
+            return jsonify({"error": "year_length must be an integer"}), 400
+
+    if name:
+        query += " AND LOWER(name) = ?"
+        params.append(name.lower())
+
+    if degree_type:
+        query += " AND LOWER(degree_type) = ?"
+        params.append(degree_type.lower())
+
+    try:
+        with sqlite3.connect(PROGRAMS_DB) as connection:
+            connection.row_factory = sqlite3.Row
+            cursor = connection.cursor()
+            cursor.execute(query, params)
+            rows = cursor.fetchall()
+
+            programs = [dict(row) for row in rows]
+            return jsonify(programs), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+    
+@app.route('/')
+def home():
     pass
 
 @app.route('/programs/<int:id>', methods=['PUT'])
