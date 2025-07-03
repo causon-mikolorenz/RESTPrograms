@@ -112,7 +112,6 @@ def create_program():
 
 @app.route('/programs/<int:id>', methods=['DELETE'])
 def delete_program(id):
-    """Delete a program by ID"""
     with sqlite3.connect(PROGRAMS_DB) as connection:
         cursor = connection.cursor()
         cursor.execute("DELETE FROM program WHERE id = ?", (id,))
