@@ -59,7 +59,7 @@ def create_program():
     degree_type = data.get('degree_type')
 
     if not all([name, year_duration, level, degree_type]):
-        return jsonify({"Error": "All fields are required"})
+        return jsonify({"Error": "All fields are required"}), 400
     
     with sqlite3.connect(PROGRAMS_DB) as connection:
         cursor = connection.cursor()
@@ -83,7 +83,7 @@ def create_program():
             "Level": level,
             "Degree Type": degree_type
         }
-    })
+    }), 201
 
 @app.route('/programs/<int:id>', methods=['DELETE'])
 def delete_program(id):
