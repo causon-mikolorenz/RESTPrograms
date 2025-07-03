@@ -25,6 +25,7 @@ def get_programs():
     name = request.args.get('name')
     degree_type = request.args.get('degree_type')
     id = request.args.get('id')
+    level = request.args.get('level')
 
     query = "SELECT * FROM program WHERE 1=1"
     params = []
@@ -45,6 +46,10 @@ def get_programs():
     if degree_type:
         query += " AND LOWER(degree_type) = ?"
         params.append(degree_type.lower())
+
+    if level:
+        query += " AND LOWER(level) = ?"
+        params.append(level.lower())
 
     if id:
         try:
