@@ -76,7 +76,7 @@ def replace_program(id):
     if not all([name, year_duration, level, degree_type]):
         return jsonify({"Error": "All fields are required."}), 400
     
-    with sqlite3.connect("programs.db") as connection:
+    with sqlite3.connect(PROGRAMS_DB) as connection:
         cursor = connection.cursor()
         cursor.execute("""
                 UPDATE program SET 
@@ -113,7 +113,7 @@ def modify_program(id):
     values = list(fields_to_update.values())
     values.append(id)
 
-    with sqlite3.connect("programs.db") as connection:
+    with sqlite3.connect(PROGRAMS_DB) as connection:
         cursor = connection.cursor()
         cursor.execute(f"UPDATE program SET {set_clause} WHERE id = ?", values)
         connection.commit()
