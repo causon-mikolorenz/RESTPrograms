@@ -24,6 +24,7 @@ def get_programs():
     year_length = request.args.get('year_length')
     name = request.args.get('name')
     degree_type = request.args.get('degree_type')
+    id = request.args.get('id')
 
     query = "SELECT * FROM program WHERE 1=1"
     params = []
@@ -43,7 +44,11 @@ def get_programs():
     if degree_type:
         query += " AND LOWER(degree_type) = ?"
         params.append(degree_type.lower())
-
+    
+    if id:
+        query += " AND id = ?"
+        params.append(id)
+        
     try:
         with sqlite3.connect(PROGRAMS_DB) as connection:
             connection.row_factory = sqlite3.Row
