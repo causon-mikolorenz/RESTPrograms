@@ -53,6 +53,11 @@ def modify_program(id):
 def create_program():
     data = request.get_json()
 
+    name = data.get('name')
+    year_duration = data.get('year_duration')
+    level = data.get('level')
+    degree_type = data.get('degree_type')
+
 @app.route('/programs/<int:id>', methods=['DELETE'])
 def delete_program(id):
     #TODO(Lopez): Implement logic to delete a program
