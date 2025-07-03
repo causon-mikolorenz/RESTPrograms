@@ -48,7 +48,7 @@ def get_programs():
     if id:
         query += " AND id = ?"
         params.append(id)
-        
+
     try:
         with sqlite3.connect(PROGRAMS_DB) as connection:
             connection.row_factory = sqlite3.Row
@@ -63,7 +63,7 @@ def get_programs():
     
 @app.route('/')
 def home():
-    pass
+    return jsonify({"message": "Welcome to Iskolutions"}), 200
 
 @app.route('/programs', methods=['GET'])
 def list_programs():
