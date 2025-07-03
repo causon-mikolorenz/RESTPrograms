@@ -73,7 +73,18 @@ def create_program():
                 (name, year_duration, level, degree_type))
         connection.commit()
         program_id = cursor.lastrowid
-        
+
+    return jsonify({
+        "Message": "Program created successfully",
+        "Program": {
+            "Program ID": program_id,
+            "Program Name": name, 
+            "Year Duration": year_duration,
+            "Level": level,
+            "Degree Type": degree_type
+        }
+    })
+
 @app.route('/programs/<int:id>', methods=['DELETE'])
 def delete_program(id):
     #TODO(Lopez): Implement logic to delete a program
