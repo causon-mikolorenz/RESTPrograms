@@ -61,6 +61,19 @@ def create_program():
     if not all([name, year_duration, level, degree_type]):
         return jsonify({"Error": "All fields are required"})
     
+    with sqlite3.connect(PROGRAMS_DB) as connection:
+        cursor = connection.cursor()
+        cursor.execute("""
+                INSERT INTO program (
+                        name, 
+                        year_duration, 
+                        level, 
+                        degree_type
+                )VALUES (?, ?, ?, ?)""",
+                (name, year_duration, level, degree_type))
+        connection.commit()
+        program_id = cursor.lastrowid
+        
 @app.route('/programs/<int:id>', methods=['DELETE'])
 def delete_program(id):
     #TODO(Lopez): Implement logic to delete a program
