@@ -31,11 +31,11 @@ def get_programs():
 
     if year_length:
         try:
-            int(year_length) 
-            query += " AND year_duration = ?"
-            params.append(year_length)
+            year_length = int(year_length)
         except ValueError:
             return jsonify({"error": "year_length must be an integer"}), 400
+        query += " AND year_duration = ?"
+        params.append(year_length)
 
     if name:
         query += " AND LOWER(name) = ?"
@@ -44,22 +44,28 @@ def get_programs():
     if degree_type:
         query += " AND LOWER(degree_type) = ?"
         params.append(degree_type.lower())
-    
+
     if id:
+        try:
+            id = int(id)
+        except ValueError:
+            return jsonify({"error": "id must be an integer"}), 400
         query += " AND id = ?"
         params.append(id)
 
-    try:
-        with sqlite3.connect(PROGRAMS_DB) as connection:
-            connection.row_factory = sqlite3.Row
-            cursor = connection.cursor()
-            cursor.execute(query, params)
-            rows = cursor.fetchall()
+    with sqlite3.connect(PROGRAMS_DB) as connection:
+        connection.row_factory = sqlite3.Row
+        cursor = connection.cursor()
+        cursor.execute(query, params)
+        rows = cursor.fetchall()
 
-            programs = [dict(row) for row in rows]
-            return jsonify(programs), 200
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
+    if not rows:
+        if id:
+            return jsonify({"error": f"No program found with id {id}"}), 404
+        return jsonify({"message": "No program found"}), 404
+
+    programs = [dict(row) for row in rows]
+    return jsonify(programs), 200
     
 @app.route('/')
 def home():
