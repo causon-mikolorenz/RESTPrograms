@@ -58,6 +58,9 @@ def create_program():
     level = data.get('level')
     degree_type = data.get('degree_type')
 
+    if not all([name, year_duration, level, degree_type]):
+        return jsonify({"Error": "All fields are required"})
+    
 @app.route('/programs/<int:id>', methods=['DELETE'])
 def delete_program(id):
     #TODO(Lopez): Implement logic to delete a program
