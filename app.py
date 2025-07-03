@@ -69,8 +69,8 @@ def get_programs():
     if not rows:
         if id:
             return jsonify({"error": f"No program found with id {id}"}), 404
-        
-        return jsonify({"message": "No program found"}), 404
+        elif any([year_length, name, degree_type, level]):
+            return jsonify({"message": "No program found"}), 404
 
     programs = [dict(row) for row in rows]
     return jsonify(programs), 200
