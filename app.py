@@ -101,8 +101,27 @@ def replace_program(id):
 
 @app.route('/programs/<int:id>', methods=['PATCH'])
 def modify_program(id):
-    # TODO(Causon): Implement logic to partially update a program
-    pass
+    data = request.get_json()
+
+    allowed_fields = ['name', 'year_duration', 'level', 'degree_type']
+    fields_to_update = {key: data[key] for key in allowed_fields if key in data}
+    
+    if not fields_to_update:
+        return jsonify({"error": "No valid fields to update"}), 400
+
+    set_clause = ", ".join(f"{field} = ?" for field in fields_to_update)
+    values = list(fields_to_update.values())
+    values.append(id)
+
+    with sqlite3.connect("programs.db") as connection:
+        cursor = connection.cursor()
+        cursor.execute(f"UPDATE program SET {set_clause} WHERE id = ?", values)
+        connection.commit()
+        
+    return jsonify({
+        "message": "Program updated successfully",
+        "updated_fields": fields_to_update
+    }), 200
 
 @app.route('/programs', methods=['POST'])
 def create_program():
