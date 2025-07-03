@@ -66,8 +66,38 @@ def list_programs():
 
 @app.route('/programs/<int:id>', methods=['PUT'])
 def replace_program(id):
-    # TODO(Causon): Implement logic to fully replace a program
-    pass
+    data = request.get_json()
+    
+    name = data.get('name')
+    year_duration = data.get('year_duration')
+    level = data.get('level')
+    degree_type = data.get('degree_type')
+
+    if not all([name, year_duration, level, degree_type]):
+        return jsonify({"Error": "All fields are required."}), 400
+    
+    with sqlite3.connect("programs.db") as connection:
+        cursor = connection.cursor()
+        cursor.execute("""
+                UPDATE program SET 
+                name = ?,
+                year_duration = ?,
+                level = ?,
+                degree_type = ?
+                WHERE id = ?""",
+                (name, year_duration, level, degree_type, id))
+        connection.commit()
+        
+        return jsonify({
+        "Message": "Program updated successfully",
+        "Program": {
+            "Program ID": id,
+            "Program Name": name, 
+            "Year Duration": year_duration,
+            "Level": level,
+            "Degree Type": degree_type
+        }
+    }), 200
 
 @app.route('/programs/<int:id>', methods=['PATCH'])
 def modify_program(id):
