@@ -60,6 +60,10 @@ def get_programs():
 def home():
     pass
 
+@app.route('/programs', methods=['GET'])
+def list_programs():
+    return get_programs()
+
 @app.route('/programs/<int:id>', methods=['PUT'])
 def replace_program(id):
     # TODO(Causon): Implement logic to fully replace a program
