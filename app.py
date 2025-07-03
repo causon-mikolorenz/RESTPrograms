@@ -1,4 +1,4 @@
-from flask import Flask, request
+from flask import Flask, request, jsonify
 import sqlite3
 
 PROGRAMS_DB = "programs.db"
@@ -51,8 +51,39 @@ def modify_program(id):
 
 @app.route('/programs', methods=['POST'])
 def create_program():
-    #TODO(Efondo): Implement logic to create a program
-    pass
+    data = request.get_json()
+
+    name = data.get('name')
+    year_duration = data.get('year_duration')
+    level = data.get('level')
+    degree_type = data.get('degree_type')
+
+    if not all([name, year_duration, level, degree_type]):
+        return jsonify({"Error": "All fields are required"}), 400
+    
+    with sqlite3.connect(PROGRAMS_DB) as connection:
+        cursor = connection.cursor()
+        cursor.execute("""
+                INSERT INTO program (
+                        name, 
+                        year_duration, 
+                        level, 
+                        degree_type
+                )VALUES (?, ?, ?, ?)""",
+                (name, year_duration, level, degree_type))
+        connection.commit()
+        program_id = cursor.lastrowid
+
+    return jsonify({
+        "Message": "Program created successfully",
+        "Program": {
+            "Program ID": program_id,
+            "Program Name": name, 
+            "Year Duration": year_duration,
+            "Level": level,
+            "Degree Type": degree_type
+        }
+    }), 201
 
 @app.route('/programs/<int:id>', methods=['DELETE'])
 def delete_program(id):
