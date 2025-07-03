@@ -119,6 +119,7 @@ def delete_program(id):
 
     if cursor.rowcount == 0:
         return jsonify({"Error": "Program not found"}), 404        
+    
     return jsonify({"Message": "Program deleted successfully"}), 200
 
 if __name__ == "__main__":
