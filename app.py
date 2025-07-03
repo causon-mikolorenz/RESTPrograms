@@ -122,6 +122,7 @@ def delete_program(id):
     
     return jsonify({"Message": "Program deleted successfully"}), 200
 
+create_tables()
+
 if __name__ == "__main__":
-    create_tables()
-    app.run(debug=True)
+    app.run()
