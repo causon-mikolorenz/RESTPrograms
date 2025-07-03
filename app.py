@@ -88,7 +88,7 @@ def replace_program(id):
                 (name, year_duration, level, degree_type, id))
         connection.commit()
         
-        return jsonify({
+    return jsonify({
         "Message": "Program updated successfully",
         "Program": {
             "Program ID": id,
