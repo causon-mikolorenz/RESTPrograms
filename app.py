@@ -51,8 +51,7 @@ def modify_program(id):
 
 @app.route('/programs', methods=['POST'])
 def create_program():
-    #TODO(Efondo): Implement logic to create a program
-    pass
+    data = request.get_json()
 
 @app.route('/programs/<int:id>', methods=['DELETE'])
 def delete_program(id):
