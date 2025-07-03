@@ -24,17 +24,20 @@ def get_programs():
     year_length = request.args.get('year_length')
     name = request.args.get('name')
     degree_type = request.args.get('degree_type')
+    id = request.args.get('id')
+    level = request.args.get('level')
 
     query = "SELECT * FROM program WHERE 1=1"
     params = []
 
     if year_length:
         try:
-            int(year_length) 
-            query += " AND year_duration = ?"
-            params.append(year_length)
+            year_length = int(year_length)
         except ValueError:
             return jsonify({"error": "year_length must be an integer"}), 400
+        
+        query += " AND year_duration = ?"
+        params.append(year_length)
 
     if name:
         query += " AND LOWER(name) = ?"
@@ -44,21 +47,40 @@ def get_programs():
         query += " AND LOWER(degree_type) = ?"
         params.append(degree_type.lower())
 
-    try:
-        with sqlite3.connect(PROGRAMS_DB) as connection:
-            connection.row_factory = sqlite3.Row
-            cursor = connection.cursor()
-            cursor.execute(query, params)
-            rows = cursor.fetchall()
+    if level:
+        query += " AND LOWER(level) = ?"
+        params.append(level.lower())
 
-            programs = [dict(row) for row in rows]
-            return jsonify(programs), 200
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
+    if id:
+        try:
+            id = int(id)
+        except ValueError:
+            return jsonify({"error": "id must be an integer"}), 400
+        
+        query += " AND id = ?"
+        params.append(id)
+
+    with sqlite3.connect(PROGRAMS_DB) as connection:
+        connection.row_factory = sqlite3.Row
+        cursor = connection.cursor()
+        cursor.execute(query, params)
+        rows = cursor.fetchall()
+
+    if not rows:
+        if id:
+            return jsonify({"error": f"No program found with id {id}"}), 404
+        elif any([year_length, name, degree_type, level]):
+            return jsonify({"message": "No program found"}), 404
+
+    programs = [dict(row) for row in rows]
+    return jsonify(programs), 200
     
 @app.route('/')
 def home():
-    pass
+   return jsonify({
+        "message": "Welcome to RESTPrograms!",
+        "docs": "https://github.com/causon-mikolorenz/RESTPrograms/blob/main/README.md"
+    }), 200
 
 @app.route('/programs', methods=['GET'])
 def list_programs():
