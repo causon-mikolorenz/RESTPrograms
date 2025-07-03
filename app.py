@@ -34,6 +34,7 @@ def get_programs():
             year_length = int(year_length)
         except ValueError:
             return jsonify({"error": "year_length must be an integer"}), 400
+        
         query += " AND year_duration = ?"
         params.append(year_length)
 
@@ -50,6 +51,7 @@ def get_programs():
             id = int(id)
         except ValueError:
             return jsonify({"error": "id must be an integer"}), 400
+        
         query += " AND id = ?"
         params.append(id)
 
@@ -62,6 +64,7 @@ def get_programs():
     if not rows:
         if id:
             return jsonify({"error": f"No program found with id {id}"}), 404
+        
         return jsonify({"message": "No program found"}), 404
 
     programs = [dict(row) for row in rows]
