@@ -63,7 +63,10 @@ def get_programs():
     
 @app.route('/')
 def home():
-    return jsonify({"message": "Welcome to Iskolutions"}), 200
+   return jsonify({
+        "message": "Welcome to RESTPrograms!",
+        "docs": "https://github.com/causon-mikolorenz/RESTPrograms/blob/main/README.md"
+    }), 200
 
 @app.route('/programs', methods=['GET'])
 def list_programs():
