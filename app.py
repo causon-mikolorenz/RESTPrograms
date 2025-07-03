@@ -112,8 +112,15 @@ def create_program():
 
 @app.route('/programs/<int:id>', methods=['DELETE'])
 def delete_program(id):
-    #TODO(Lopez): Implement logic to delete a program
-    pass
+    with sqlite3.connect(PROGRAMS_DB) as connection:
+        cursor = connection.cursor()
+        cursor.execute("DELETE FROM program WHERE id = ?", (id,))
+        connection.commit()
+
+    if cursor.rowcount == 0:
+        return jsonify({"Error": "Program not found"}), 404        
+    
+    return jsonify({"Message": "Program deleted successfully"}), 200
 
 if __name__ == "__main__":
     create_tables()
