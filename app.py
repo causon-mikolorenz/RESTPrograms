@@ -21,7 +21,7 @@ def create_tables():
         print("Program table has been created successfully!")
 
 def get_programs():
-    year_length = request.args.get('year_length')
+    year_duration = request.args.get('year_duration')
     name = request.args.get('name')
     degree_type = request.args.get('degree_type')
     id = request.args.get('id')
@@ -30,14 +30,14 @@ def get_programs():
     query = "SELECT * FROM program WHERE 1=1"
     params = []
 
-    if year_length:
+    if year_duration:
         try:
-            year_length = int(year_length)
+            year_duration = int(year_duration)
         except ValueError:
-            return jsonify({"error": "year_length must be an integer"}), 400
-        
+            return jsonify({"error": "year_duration must be an integer"}), 400
+
         query += " AND year_duration = ?"
-        params.append(year_length)
+        params.append(year_duration)
 
     if name:
         query += " AND LOWER(name) = ?"
@@ -69,7 +69,7 @@ def get_programs():
     if not rows:
         if id:
             return jsonify({"error": f"No program found with id {id}"}), 404
-        elif any([year_length, name, degree_type, level]):
+        elif any([year_duration, name, degree_type, level]):
             return jsonify({"message": "No program found"}), 404
 
     programs = [dict(row) for row in rows]
